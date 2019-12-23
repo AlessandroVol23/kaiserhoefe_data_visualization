@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'kaiserhofinfovis'
+      MYSQL_USER: 'infoviz'
+      MYSQL_PASSWORD: 'kaiserhoefe'
+      MYSQL_ROOT_PASSWORD: 'kaiserhoefe_root'
+    ports:
+      - '1234:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ./db/kaiserhofinfovis.sql:/docker-entrypoint-initdb.d/dump.sql
