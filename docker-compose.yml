@@ -2,16 +2,43 @@ version: '3.3'
 
 services:
   db:
-    image: mysql:latest
+    container_name: db
+    image: mysql:5
     restart: always
     environment:
       MYSQL_DATABASE: 'kaiserhofinfovis'
       MYSQL_USER: 'infoviz'
       MYSQL_PASSWORD: 'kaiserhoefe'
       MYSQL_ROOT_PASSWORD: 'kaiserhoefe_root'
-    ports:
-      - '1234:3306'
     expose:
       - '3306'
     volumes:
       - ./db/kaiserhofinfovis.sql:/docker-entrypoint-initdb.d/dump.sql
+    networks:
+      - base
+
+  django:
+    restart: on-failure
+    build:
+      context: kaiser_hoefe
+    ports:
+      - '8000:8000'
+    expose:
+      - '8000'
+    volumes:
+      - ./kaiser_hoefe:/kaiser_hoefe
+    command: "./tools/docker_init.sh"
+    depends_on:
+      - db
+    networks:
+      - base
+
+    environment:
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "password"
+      ADMIN_EMAIL: "admin@example.com"
+
+networks:
+  base:
+
+
