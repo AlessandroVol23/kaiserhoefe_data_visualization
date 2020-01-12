@@ -8,6 +8,7 @@ app="/kaiser_hoefe"
 
 echo "Initializing database"
 # python "${app}/manage.py" wait_for_db
+python "${app}/manage.py" makemigrations
 python "${app}/manage.py" migrate
 
 if [[ -n "${ADMIN_USERNAME}" ]] && [[ -n "${ADMIN_PASSWORD}" ]] && [[ -n "${ADMIN_EMAIL}" ]]; then
