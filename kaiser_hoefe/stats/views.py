@@ -1,7 +1,7 @@
 import pandas as pd
 from django.http import HttpResponse
 
-from .models import Person
+from .models import Person, Beziehung
 
 
 def index(request):
@@ -32,3 +32,19 @@ def men_women_decade(request):
     df_grouped = pd.DataFrame(df_grouped.to_records())
     df_grouped.columns = ['land', 'geschlecht', 'count']
     return HttpResponse(df_grouped.to_json())
+
+def relationship_type_decade(requers):
+    df = pd.DataFrame(list(Beziehung.objects.all().values()))
+    df_persons = pd.read_csv('data/countries_cities.csv')
+    df_joined = pd.merge(df_persons, df, left_on='f41', right_on='f41x_id', how='left')
+    df_joined.loc[df_joined.art == 1, 'art'] = 'offspring'
+    df_joined.loc[df_joined.art == 2, 'art'] = 'marriage'
+    df_grouped = pd.DataFrame(df_joined.groupby(['birthyear', 'land', 'art']).count()['f41'])
+    df_grouped = pd.DataFrame(df_grouped.to_records())
+    return HttpResponse(df_grouped.to_html())
+
+def incest_relationsships(request):
+    df_rel_parent = pd.read_csv('data/relationsships_parents.csv')
+    df_marriages = df_rel_parent.loc[df_rel_parent.art == 2]
+    df_incest = df_marriages.groupby('unique_parent').count()['art']
+    return HttpResponse(df_incest.to_html())

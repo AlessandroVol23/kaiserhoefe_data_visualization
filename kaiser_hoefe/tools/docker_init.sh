@@ -20,5 +20,6 @@ if [[ -n "${ADMIN_USERNAME}" ]] && [[ -n "${ADMIN_PASSWORD}" ]] && [[ -n "${ADMI
   || true
 fi
 
+
 echo "Starting django"
 python -u "${app}/manage.py" runserver 0.0.0.0:8000
