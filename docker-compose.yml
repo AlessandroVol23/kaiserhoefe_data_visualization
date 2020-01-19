@@ -10,6 +10,8 @@ services:
       MYSQL_USER: 'infoviz'
       MYSQL_PASSWORD: 'kaiserhoefe'
       MYSQL_ROOT_PASSWORD: 'kaiserhoefe_root'
+    ports:
+      - '3306:3306'
     expose:
       - '3306'
     volumes:
@@ -32,6 +34,8 @@ services:
       - db
     networks:
       - base
+    links:
+      - db
 
     environment:
       ADMIN_USERNAME: "admin"
