@@ -1,7 +1,7 @@
 import pandas as pd
 from django.http import HttpResponse
 
-from .models import Person, Beziehung
+from .models import Person, Beziehung, Bild
 
 
 def index(request):
@@ -46,3 +46,15 @@ def relationship_type_decade(requers):
 def incest_relationsships(request):
     df_incest = pd.read_csv('data/incest_relationships.csv')
     return HttpResponse(df_incest.to_json())
+
+def person_birth_death_pic(request):
+    df = pd.DataFrame(list(Person.objects.all().values()))
+    df['date_of_birth'] = df.f13
+    df['date_of_death'] = df.f14
+    df['name'] = df.zlabel
+
+    df_bilder = pd.DataFrame(list(Bild.objects.all().values()))
+    df_merged = pd.merge(df, df_bilder[['f41_id', 'link']], how='left', left_on='f41', right_on='f41_id')
+
+    df_ret = df_merged[['name', 'date_of_birth', 'date_of_death', 'link']]
+    return HttpResponse(df_ret.to_json())
