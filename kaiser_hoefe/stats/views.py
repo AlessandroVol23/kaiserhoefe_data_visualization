@@ -28,9 +28,9 @@ def men_women_decade(request):
     :return:
     """
     df = pd.read_csv('data/countries_cities.csv')
-    df_grouped = pd.DataFrame(df.groupby(['land', 'f24']).count()['zlabel'])
+    df_grouped = pd.DataFrame(df.groupby(['birthyear', 'land', 'f24']).count()['zlabel'])
     df_grouped = pd.DataFrame(df_grouped.to_records())
-    df_grouped.columns = ['land', 'geschlecht', 'count']
+    df_grouped.columns = ['jahr', 'land', 'geschlecht', 'count']
     return HttpResponse(df_grouped.to_json())
 
 def relationship_type_decade(requers):
@@ -44,7 +44,5 @@ def relationship_type_decade(requers):
     return HttpResponse(df_grouped.to_html())
 
 def incest_relationsships(request):
-    df_rel_parent = pd.read_csv('data/relationsships_parents.csv')
-    df_marriages = df_rel_parent.loc[df_rel_parent.art == 2]
-    df_incest = df_marriages.groupby('unique_parent').count()['art']
-    return HttpResponse(df_incest.to_html())
+    df_incest = pd.read_csv('data/incest_relationships.csv')
+    return HttpResponse(df_incest.to_json())
