@@ -64,3 +64,4 @@ rtree
 mysql-connector
 SQLAlchemy
 PyMySQL
+django-cors-headers
