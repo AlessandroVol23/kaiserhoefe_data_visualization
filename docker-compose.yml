@@ -1,19 +1,28 @@
-version: '3.3'
+version: "3.3"
 
 services:
+  client:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - base
+
   db:
     container_name: db
     image: mysql:5
     restart: always
     environment:
-      MYSQL_DATABASE: 'kaiserhofinfovis'
-      MYSQL_USER: 'infoviz'
-      MYSQL_PASSWORD: 'kaiserhoefe'
-      MYSQL_ROOT_PASSWORD: 'kaiserhoefe_root'
+      MYSQL_DATABASE: "kaiserhofinfovis"
+      MYSQL_USER: "infoviz"
+      MYSQL_PASSWORD: "kaiserhoefe"
+      MYSQL_ROOT_PASSWORD: "kaiserhoefe_root"
     ports:
-      - '3306:3306'
+      - "3306:3306"
     expose:
-      - '3306'
+      - "3306"
     volumes:
       - ./db/kaiserhofinfovis.sql:/docker-entrypoint-initdb.d/dump.sql
     networks:
@@ -24,9 +33,9 @@ services:
     build:
       context: kaiser_hoefe
     ports:
-      - '8000:8000'
+      - "8000:8000"
     expose:
-      - '8000'
+      - "8000"
     volumes:
       - ./kaiser_hoefe:/kaiser_hoefe
     command: "./tools/docker_init.sh"
@@ -44,5 +53,3 @@ services:
 
 networks:
   base:
-
-
