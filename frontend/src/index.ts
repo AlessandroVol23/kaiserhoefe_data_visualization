@@ -29,7 +29,6 @@ app.get("/milestones/:id", async (req, res) => {
 });
 
 app.get("/env", async (req, res) => {
-  console.log("hey", process.env.backend);
   res.send(process.env.backend);
 });
 
