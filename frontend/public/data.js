@@ -49,7 +49,7 @@ const getIncestData = async env => {
   // ###################################################################
 
   const humanRequest = await fetch(
-    "http://localhost:8000/stats/men_women_decade",
+    `http://${env}:8000/stats/men_women_decade`,
     {
       method: "GET"
     }
