@@ -1,9 +1,16 @@
 # Kaiser Hoefe Data Visualization
 
+This is the repository for the information visualization course @ LMU. The goal was to build a small interactive web app for visualizing data from the habsburg family.
+
+The main components are:
+- MySQL database
+- Django backend
+- JS frontend 
+
 ## Docker
 
 All docker services are combined in `docker_compose.yml`. You can start them with the command 
-`docker_compose up`. 
+`docker_compose up`. For installing docker please have a look at the official documentation: https://docs.docker.com/install/
 
 ## Data
 
@@ -18,6 +25,7 @@ You can access the data then with any DBS on `localhost:1234`.
 
 Django will also be started in the docker container and uses the MySQL database as backend.
 You can access Django on the url: `localhost:8000`. 
+
 On `localhost:8000/admin` you can access the admin page, currently with:
 - User: admin
 - Password: password
