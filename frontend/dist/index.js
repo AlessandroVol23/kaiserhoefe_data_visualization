@@ -23,37 +23,41 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const moment_1 = __importDefault(require("moment"));
 const _ = __importStar(require("lodash"));
-const fetch = require('node-fetch');
-moment_1.default.locale('de');
+const fetch = require("node-fetch");
+moment_1.default.locale("de");
 const app = express_1.default();
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({
-    extended: true,
+    extended: true
 }));
 app.use(cors_1.default());
-app.use('/', express_1.default.static('public'));
-app.get('/milestones/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
+app.use("/", express_1.default.static("public"));
+app.get("/milestones/:id", (req, res) => __awaiter(this, void 0, void 0, function* () {
     var activeYear = parseInt(req.params.id);
     const timelineData = yield getTimelineData();
     const milestones = yield getMilestones(activeYear, timelineData);
     res.json(milestones);
 }));
+app.get("/env", (req, res) => __awaiter(this, void 0, void 0, function* () {
+    console.log("hey", process.env.backend);
+    res.send(process.env.backend);
+}));
 const getTimelineData = () => __awaiter(this, void 0, void 0, function* () {
-    const timelineRequest = yield fetch('http://localhost:8000/stats/person_birth_death_pic', {
-        method: 'GET',
+    const timelineRequest = yield fetch("http://localhost:8000/stats/person_birth_death_pic", {
+        method: "GET"
     });
     const data = yield timelineRequest.json();
     const name = _.values(data.name);
     const birthday = _.values(data.date_of_birth);
     const deathday = _.values(data.date_of_birth);
     const img = _.values(data.link);
-    const date = moment_1.default(moment_1.default(birthday[0]).format('YYYY MMM DD')).format('YYYY,M,D');
+    const date = moment_1.default(moment_1.default(birthday[0]).format("YYYY MMM DD")).format("YYYY,M,D");
     const milestones = name.map((n, i) => {
         return {
             birthday: birthday[i],
             deathday: deathday[i],
             name: n,
-            img: img[i],
+            img: img[i]
         };
     });
     return milestones;
@@ -61,52 +65,50 @@ const getTimelineData = () => __awaiter(this, void 0, void 0, function* () {
 const getMilestones = (activeYear, milestones) => {
     const currentMilestones = milestones.map((e, i) => {
         //console.log(e.birthday)
-        if (e.birthday && e.birthday.trim() !== '') {
-            var reg1 = new RegExp('[1-9][0-9][0-9][0-9]$');
-            var reg2 = new RegExp('[1-9][0-9][0-9][0-9]~$');
+        if (e.birthday && e.birthday.trim() !== "") {
+            var reg1 = new RegExp("[1-9][0-9][0-9][0-9]$");
+            var reg2 = new RegExp("[1-9][0-9][0-9][0-9]~$");
             var reg3 = new RegExp(/([1-9][0-9][0-9][0-9]\s[A-Z][a-z][a-z]\s([0][1-9]|[1-3][0-9]))$/);
             const varInit = (date) => {
                 if (date.match(reg1)) {
-                    return moment_1.default(moment_1.default(date).format('YYYY')).format('YYYY,M,D');
+                    return moment_1.default(moment_1.default(date).format("YYYY")).format("YYYY,M,D");
                 }
                 else if (date.match(reg2)) {
-                    return moment_1.default(moment_1.default(date.replace('~', '')).format('YYYY')).format('YYYY,M,D');
+                    return moment_1.default(moment_1.default(date.replace("~", "")).format("YYYY")).format("YYYY,M,D");
                 }
                 else if (date.match(reg3)) {
-                    return moment_1.default(moment_1.default(date, 'YYYY MMM DD').format('YYYY MMM DD'), 'YYYY MMM DD').format('YYYY,M,D');
+                    return moment_1.default(moment_1.default(date, "YYYY MMM DD").format("YYYY MMM DD"), "YYYY MMM DD").format("YYYY,M,D");
                 }
             };
             const birthday = varInit(e.birthday);
             const deathday = varInit(e.birthday);
             const response = [];
-            if (parseInt(moment_1.default(birthday).format('YYYY')) <=
+            if (parseInt(moment_1.default(birthday).format("YYYY")) <=
                 parseInt(activeYear + 50) &&
-                parseInt(moment_1.default(birthday).format('YYYY')) >=
-                    parseInt(activeYear)) {
+                parseInt(moment_1.default(birthday).format("YYYY")) >= parseInt(activeYear)) {
                 response.push({
                     startDate: birthday,
                     headline: `* ${e.name}`,
                     text: `${e.name} wird geboren`,
                     asset: {
                         media: e.img,
-                        credit: '',
-                        caption: '',
-                    },
+                        credit: "",
+                        caption: ""
+                    }
                 });
             }
-            if (parseInt(moment_1.default(deathday).format('YYYY')) <=
+            if (parseInt(moment_1.default(deathday).format("YYYY")) <=
                 parseInt(activeYear + 50) &&
-                parseInt(moment_1.default(deathday).format('YYYY')) >=
-                    parseInt(activeYear)) {
+                parseInt(moment_1.default(deathday).format("YYYY")) >= parseInt(activeYear)) {
                 response.push({
                     startDate: deathday,
                     headline: `† ${e.name}`,
                     text: `${e.name} verstirbt`,
                     asset: {
                         media: e.img,
-                        credit: '',
-                        caption: '',
-                    },
+                        credit: "",
+                        caption: ""
+                    }
                 });
             }
             //console.log('response', response)
@@ -115,17 +117,17 @@ const getMilestones = (activeYear, milestones) => {
     });
     const source = {
         timeline: {
-            headline: 'Die Geschichte beginnt ...',
-            text: 'Meilensteine um 1200',
-            startdate: '1220',
-            type: 'default',
-            date: _.spread(_.union)(currentMilestones),
-        },
+            headline: "Die Geschichte beginnt ...",
+            text: "Meilensteine um 1200",
+            startdate: "1220",
+            type: "default",
+            date: _.spread(_.union)(currentMilestones)
+        }
     };
     return source;
 };
-const server = app.listen(5000, () => {
-    console.log('server is running');
+const server = app.listen(process.env.PORT || 5000, () => {
+    console.log("server is running");
 });
 exports.default = server;
 //# sourceMappingURL=index.js.map

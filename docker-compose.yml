@@ -9,6 +9,8 @@ services:
       - "5000:5000"
     networks:
       - base
+    environment:
+      backend: "138.246.232.225"
 
   db:
     container_name: db

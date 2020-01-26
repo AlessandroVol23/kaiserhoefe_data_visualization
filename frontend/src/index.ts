@@ -28,6 +28,11 @@ app.get("/milestones/:id", async (req, res) => {
   res.json(milestones);
 });
 
+app.get("/env", async (req, res) => {
+  console.log("hey", process.env.backend);
+  res.send(process.env.backend);
+});
+
 const getTimelineData = async () => {
   const timelineRequest = await fetch(
     "http://localhost:8000/stats/person_birth_death_pic",
