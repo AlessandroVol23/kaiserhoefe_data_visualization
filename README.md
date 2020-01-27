@@ -10,7 +10,15 @@ The main components are:
 ## Docker
 
 All docker services are combined in `docker_compose.yml`. You can start them with the command 
-`docker_compose up`. For installing docker please have a look at the official documentation: https://docs.docker.com/install/
+
+```bash
+docker-compose up
+```
+
+For installing docker please have a look at the official documentation: https://docs.docker.com/install/
+
+
+After that you can access the website with: http://localhost:5000
 
 ## Data
 
